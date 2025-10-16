@@ -1,0 +1,40 @@
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI';
+}
+
+body {
+    background: #f4f6fb;
+    color: #222;
+    line-height: 1.5;
+    padding: 18px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    background: #2b6cb0;
+    color: #fff;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+header h1 {
+    font-size: 1.25rem;
+}
+
+header h2 {
+    color: #16325c;
+    margin-bottom: 12px;
+}

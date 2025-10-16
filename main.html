@@ -7,13 +7,25 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
   <link rel="stylesheet" href="./styles.css">
+  
 </head>
 <body>
-    <header>
-        <h1>After School Clubs</h1>
-        <div class="controls">
-            
-        </div>
-    </header>
+    <div id="app" class="container">
+        <header>
+            <h1>After School Clubs</h1>
+            <div class="controls">
+                <button class="btn" v-bind:disabled=0>
+                    0
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Checkout</span>
+                </button>
+            </div>
+        </header>
+        <main>
+            <h2>Lessons</h2>
+            <p>{{ message }}</p>
+        </main>
+    </div>
+    <script src="vuejs.js"></script>
 </body>
 </html>
