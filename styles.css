@@ -38,3 +38,62 @@ header h2 {
     color: #16325c;
     margin-bottom: 12px;
 }
+
+.controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.topbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+    align-items: center;
+}
+
+.note {
+    font-size: 0.88rem;
+    color: #475569;
+}
+
+.sort-options .note label {
+    margin-left: 8px;
+    margin-right: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.search {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.search input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccd7ea;
+}
+
+.btn {
+    background: #fff;
+    color: #2b6cb0;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+

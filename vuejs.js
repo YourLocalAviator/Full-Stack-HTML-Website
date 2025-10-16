@@ -2,9 +2,17 @@ var webstore = new Vue({
     el: '#app',
     data: {
         lessons: lessons,
-        cart: [],
         showCartPage: false,
-        message: 'Test!'
+
+        sortAttribute: 'subject',
+        sortDirection: 'asc',
+        searchQuery: '',
+        
+        cart: [],
+        checkout: {
+            name: '',
+            phone: '',
+        }
     },
     methods: {
 

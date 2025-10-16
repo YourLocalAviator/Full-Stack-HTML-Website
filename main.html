@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>After School Clubs</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-  <link rel="stylesheet" href="./styles.css">
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
     <div id="app" class="container">
@@ -22,10 +21,45 @@
             </div>
         </header>
         <main>
-            <h2>Lessons</h2>
-            <p>{{ message }}</p>
+            <!-- Products Page-->
+            <div v-if="!showCartPage">
+                <div class="topbar">
+                    <!-- Search Bar -->
+                    <div class="search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search lessons (title, location, price, availability)..." v-model:trim="searchQuery">
+                    </div>
+
+                    <div class="sort-options">
+                        <!-- Sort By Buttons -->
+                        <div class="note">
+                            <strong>Sort by: </strong>
+                            <label><input type="radio" v-model="sortAttribute" value="subject">Subject</label>
+                            <label><input type="radio" v-model="sortAttribute" value="location">Location</label>
+                            <label><input type="radio" v-model="sortAttribute" value="price">Price</label>
+                            <label><input type="radio" v-model="sortAttribute" value="spaces">Availability</label>
+                        </div>
+
+                        <!-- Ascending / Descending Sort Buttons -->
+                        <div class="note" style="margin-top: 8px;">
+                            <strong>Order: </strong>
+                            <label><input type="radio" v-model="sortDirection" value="asc">Ascending</label>
+                            <label><input type="radio" v-model="sortDirection" value="desc">Descending</label>
+                        </div>
+                    </div>
+                </div>
+                <h2>Lessons</h2>
+            </div>
+
+            <!-- Checkout Page -->
+            <div v-else>
+
+            </div>
         </main>
     </div>
+
+    <!-- Linking of vuejs scripts and data -->
+    <script src="lessons.js"></script>
     <script src="vuejs.js"></script>
 </body>
 </html>
