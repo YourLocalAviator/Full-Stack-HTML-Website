@@ -27,7 +27,7 @@
                     <!-- Search Bar -->
                     <div class="search">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Search lessons (title, location, price, availability)..." v-model:trim="searchQuery">
+                        <input type="text" placeholder="Search lessons (title, location, price, availability)..." v-model.trim="searchQuery">
                     </div>
 
                     <div class="sort-options">
@@ -48,10 +48,22 @@
                         </div>
                     </div>
                 </div>
-                <h2>Lessons</h2>
+                <h2 style="color: #16325c; margin-bottom: 12px;">Lessons</h2>
+                <!-- Lesson Grid, to display each lesson in a grid using v-for loop -->
                 <div class="lessons-grid">
-                    <div class="lesson">
-                        
+                    <div class="lesson" v-for="lesson in lessons">
+                        <div class="icon">
+                            <i v-bind:class="lesson.icon"></i>
+                        </div>
+                        <div class="lesson-info">
+                            <h3> {{ lesson.title }} </h3>
+                            <p><strong>Subject:</strong> {{ lesson.subject }} </p>
+                            <p><strong>Location:</strong> {{lesson.location }} </p>
+                            <p><strong>Price:</strong> {{ lesson.price }} </p>
+                            <p><strong>Spaces:</strong> {{ lesson.spaces }} </p>
+                            <span v-for="n in lesson.rating">★</span>
+                            <span v-for="n in 5 - lesson.rating">☆</span>
+                        </div>
                     </div>
                 </div>
             </div>
