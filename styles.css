@@ -151,6 +151,41 @@ header h2 {
     font-size: 0.9rem;
 }
 
+.cart-items {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #eff3fb;
+    background: #fff;
+}
+
+.cart-items .icon {
+    width: 48px;
+    height: 48px;
+}
+
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: #6b7a90;
+}
+
+.cart-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.cart-cost {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 @media (max-width:800px){
       .lessons-grid { 
         grid-template-columns: 1fr; 

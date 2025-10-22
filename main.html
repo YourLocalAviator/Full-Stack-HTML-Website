@@ -64,11 +64,14 @@
                             <span v-for="n in lesson.rating">★</span>
                             <span v-for="n in 5 - lesson.rating">☆</span>
                         </div>
+
+                        <!-- Class containing Button and Information Availability - Right side of each lesson grid -->
                         <div class="right-info">
                             <button class="btn" v-bind:disabled="lesson.spaces === 0" v-on:click="addToCart(lesson)">
                                 <i class="fa-solid fa-plus"></i>Add to cart
                             </button>
 
+                            <!-- Class containing v-if-else statement showing availability of lessons -->
                             <div class="note" style="margin-top: 6px;">
                                 <span v-if="lesson.spaces === 0" style="color: #b91c1c">Full</span>
                                 <span v-else-if="lesson.spaces < 5" style="color: #ffa600">Only {{lesson.spaces}} left</span>
@@ -81,15 +84,61 @@
 
             <!-- Checkout Page -->
             <div v-else>
-                <h2 style="color: #16325c; margin-bottom: 12px;">Shopping Cart</h2>
+                <h2 style="margin-bottom: 12px;">Shopping Cart</h2>
+
+                <!-- Div class - If cart is emptied, back button is shown -->
                 <div v-if="cartItemCount === 0" class="empty">
+                    <p>Your cart is currently empty. You can return to the lessons page to add some lessons!</p>
                     <button class="btn" v-on:click="toggleCartPage" style="margin-top: 14px; background: #2b6cb0; color: #fff">
                         <- Back to Lessons
                     </button>
                 </div>
 
                 <div v-else class="cart-page">
+                    <!-- Div class containing summary of each lesson -->
+                    <div class="cart-items" v-for="item in cartSummary">
+                        <div class="icon">
+                            <img v-bind:src="item.lesson.icon" v-bind:style="{width: '36px', height: '36px'}"></img>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700;">
+                                {{item.lesson.title}}
+                            </div>
+                            <div class="note">
+                                Subject: {{item.lesson.subject}} | Location: {{item.lesson.location}}
+                            </div>
+                            <div style="margin-top: 6px;" class="note">
+                                Price: ${{item.lesson.price}} | Quantity: {{item.quantity}}
+                            </div>
+                        </div>
 
+                        <!-- Div class containing lesson buttons, add / remove Qty or remove selected lesson -->
+                        <div class="cart-btns">
+                            <div style="display: flex; gap: 6px;">
+                                <button class="btn" v-on:click="decreaseCartItem(item.lesson)" v-bind:disabled="item.quantity === 0"><i class="fa-solid fa-minus"></i></button>
+                                <button class="btn" v-on:click="increaseCartItem(item.lesson)" v-bind:disabled="item.lesson.spaces === 0"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                            <button class="btn" v-on:click="removeFromCart(item.lesson)" style="background: #fee2e2; color:#b91c1c">
+                                <i class="fa-solid fa-trash"></i>Remove
+                            </button>
+                        </div>
+                    </div>
+                        <!-- Div class containing total Cart Qty and Costs -->
+                        <div class="cart-cost">
+                            <div>
+                                <div style="font-weight: 700; font-size: 1.05rem;">
+                                    Total Items: {{cartItemCount}}
+                                    </div>
+                                    <div class="note">
+                                    Total Cost: ${{cartTotal}}
+                                </div>
+                            </div>
+
+                            <!-- Div class containing Empty Cart button on right hand side -->
+                            <div style="text-align: right;">
+                                <button class="btn" v-on:click="emptyCart" style="background: #f8fafc; color: #2b6cb0;">Empty Cart</button>
+                            </div>
+                        </div>
                 </div>
             </div>
         </main>
