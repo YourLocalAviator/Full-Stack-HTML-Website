@@ -59,7 +59,7 @@
                             <h3> {{ lesson.title }} </h3>
                             <p><strong>Subject:</strong> {{ lesson.subject }} </p>
                             <p><strong>Location:</strong> {{lesson.location }} </p>
-                            <p><strong>Price:</strong> {{ lesson.price }} </p>
+                            <p><strong>Price:</strong> ${{ lesson.price }} </p>
                             <p><strong>Spaces:</strong> {{ lesson.spaces }} </p>
                             <span v-for="n in lesson.rating">★</span>
                             <span v-for="n in 5 - lesson.rating">☆</span>

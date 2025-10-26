@@ -112,10 +112,19 @@ var webstore = new Vue({
             return this.isNameValid && this.isPhoneValid && this.cartItemCount > 0;
         },
         filteredLessons() {
+            const query = (this.searchQuery || '').trim().toLowerCase();
+
+            const matchedQuery = (lesson) => {
+                if (!query) return true;
+                const combinedInfo = `${lesson.title} ${lesson.subject} ${lesson.location} ${lesson.price} ${lesson.spaces}`.toLowerCase();
+                return combinedInfo.indexOf(query) !== -1;
+            };
+            let result = this.lessons.filter(matchedQuery);
+
             const attr = this.sortAttribute;
             const dir = this.sortDirection === 'asc' ? 1 : -1;
 
-            let result = this.lessons.slice().sort((a,b) => {
+            result = result.slice().sort((a,b) => {
                 let va = a[attr];
                 let vb = b[attr];
 
