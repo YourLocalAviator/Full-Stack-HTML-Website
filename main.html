@@ -90,7 +90,7 @@
                 <div v-if="cartItemCount === 0" class="empty">
                     <p>Your cart is currently empty. You can return to the lessons page to add some lessons!</p>
                     <button class="btn" v-on:click="toggleCartPage" style="margin-top: 14px; background: #2b6cb0; color: #fff">
-                        <- Back to Lessons
+                        ← Back to Lessons
                     </button>
                 </div>
 
@@ -127,18 +127,40 @@
                         <div class="cart-cost">
                             <div>
                                 <div style="font-weight: 700; font-size: 1.05rem;">
-                                    Total Items: {{cartItemCount}}
-                                    </div>
-                                    <div class="note">
-                                    Total Cost: ${{cartTotal}}
+                                Total Items: {{cartItemCount}}
                                 </div>
-                            </div>
-
-                            <!-- Div class containing Empty Cart button on right hand side -->
-                            <div style="text-align: right;">
-                                <button class="btn" v-on:click="emptyCart" style="background: #f8fafc; color: #2b6cb0;">Empty Cart</button>
+                                <div class="note">
+                                Total Cost: ${{cartTotal}}
                             </div>
                         </div>
+
+                        <!-- Div class containing Empty Cart button on right hand side -->
+                        <div style="text-align: right;">
+                            <button class="btn" v-on:click="emptyCart" style="background: #f8fafc; color: #2b6cb0;">Empty Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Form -->
+                    <div class="checkout-panel">
+                        <h3 style="margin-bottom: 8px;">Checkout</h3>
+                        <div class="checkout-inputs">
+                            <input type="text" placeholder="Full Name (letters only)" v-model:trim="checkout.name">
+                            <input type="text" placeholder="Phone Number (digits only)" v-model:trim="checkout.phone">
+                        </div>
+
+                        <div class="checkout-btns">
+                            <button class="btn" v-bind:disabled="!isCheckoutValid" v-on:click="submitCheckout" style="background: #2b6cb0; color: white;">
+                                <i class="fa solid fa-credit-card"></i>Place Order
+                            </button>
+                            <div class="note">
+                                <div v-if="!checkout.name" style="color: #475569">Name required</div>
+                                <div v-else-if="!isNameValid" style="color: #b91c1c">Name must contain letters only (A-Z, spaces allowed)</div>
+
+                                <div v-if="!checkout.phone" style="color: #475569">Phone number required</div>
+                                <div v-else-if="!isPhoneValid" style="color: #b91c1c">Phone number must contain digits only</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

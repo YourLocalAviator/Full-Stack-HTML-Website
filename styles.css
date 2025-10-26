@@ -151,6 +151,12 @@ header h2 {
     font-size: 0.9rem;
 }
 
+.cart-page {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .cart-items {
     display: flex;
     gap: 12px;
@@ -184,6 +190,34 @@ header h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.checkout-panel {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px dashed #dbeafe;
+}
+
+.checkout-inputs {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.checkout-inputs input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccd7ea;
+}
+
+.checkout-btns {
+    margin-top: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 @media (max-width:800px){

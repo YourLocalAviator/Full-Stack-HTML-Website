@@ -65,6 +65,21 @@ var webstore = new Vue({
                 }
             });
             this.cart = [];
+        },
+        submitCheckout() {
+            if (!this.isCheckoutValid) return;
+
+            const checkoutSummary = this.cartSummary.map(s =>
+                `${s.lesson.title} x${s.quantity} ${(s.lesson.price * s.quantity)}`
+            );
+            const checkoutTotal = this.cartTotal;
+            const checkoutMessage = `Order Submitted! Thank you for your order. \n\n Name: ${this.checkout.name} \n Phone: ${this.checkout.phone} \n\nItems: \n${checkoutSummary.join('\n')} \n\nTotal: $${checkoutTotal} `;
+            alert(checkoutMessage);
+
+            this.cart = [];
+            this.checkout.name = '';
+            this.checkout.phone= '';
+            this.showCartPage = false;
         }
     },
     computed: {
@@ -85,5 +100,16 @@ var webstore = new Vue({
             return this.cartSummary.reduce(
                 (sum, {lesson, quantity}) => sum + lesson.price * quantity,0);
         },
+        isNameValid () {
+            if (!this.checkout.name) return false;
+            return /^[A-Za-z\s'.-]+$/.test(this.checkout.name);
+        },
+        isPhoneValid () {
+            if (!this.checkout.phone) return false;
+            return /^\+?\d+$/.test(this.checkout.phone);
+        },
+        isCheckoutValid() {
+            return this.isNameValid && this.isPhoneValid && this.cartItemCount > 0;
+        }
     }
 });
