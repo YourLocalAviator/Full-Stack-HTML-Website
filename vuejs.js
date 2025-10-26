@@ -110,6 +110,31 @@ var webstore = new Vue({
         },
         isCheckoutValid() {
             return this.isNameValid && this.isPhoneValid && this.cartItemCount > 0;
+        },
+        filteredLessons() {
+            const attr = this.sortAttribute;
+            const dir = this.sortDirection === 'asc' ? 1 : -1;
+
+            let result = this.lessons.slice().sort((a,b) => {
+                let va = a[attr];
+                let vb = b[attr];
+
+                if (attr === 'subject' || attr === 'location') {
+                    va = (va || '').toString().toLowerCase();
+                    vb = (vb || '').toString().toLowerCase();
+                    if (va < vb) return -1 * dir;
+                    if (va > vb) return 1 * dir; 
+                    return 0;
+                }
+
+                if (attr === 'price' || attr === 'spaces') {
+                    const na = Number(va) || 0;
+                    const nb = Number(vb) || 0;
+                    return (na - nb) * dir;
+                }
+                return 0;
+            })
+            return result;
         }
     }
 });

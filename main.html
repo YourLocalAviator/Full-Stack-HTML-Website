@@ -48,10 +48,10 @@
                         </div>
                     </div>
                 </div>
-                <h2 style="color: #16325c; margin-bottom: 12px;">Lessons</h2>
+                <h2 style="color: #16325c; margin-bottom: 12px;">Lessons ({{filteredLessons.length}})</h2>
                 <!-- Lesson Grid, to display each lesson in a grid using v-for loop -->
                 <div class="lessons-grid">
-                    <div class="lesson" v-for="lesson in lessons">
+                    <div class="lesson" v-for="lesson in filteredLessons">
                         <div class="icon">
                             <img v-bind:src="lesson.icon" v-bind:style="{width: '48px', height: '48px'}"></img>
                         </div>
