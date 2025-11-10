@@ -12,6 +12,8 @@
     <div id="app" class="container">
         <header>
             <h1>After School Clubs</h1>
+
+            <!-- Checkout button - checks if there is more than one item, then allows to be accessed. -->
             <div class="controls">
                 <button class="btn" v-bind:disabled="cartItemCount === 0" v-on:click="toggleCartPage">
                     <span>{{ cartItemCount }}</span>
@@ -30,8 +32,8 @@
                         <input type="text" placeholder="Search lessons (title, location, price, availability)..." v-model.trim="searchQuery">
                     </div>
 
+                    <!-- Sort By Buttons -->
                     <div class="sort-options">
-                        <!-- Sort By Buttons -->
                         <div class="note">
                             <strong>Sort by: </strong>
                             <label><input type="radio" v-model="sortAttribute" value="subject">Subject</label>
@@ -48,7 +50,10 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Lessons Header has a counter to show number of lessons, filtered or unfiltered-->
                 <h2 style="color: #16325c; margin-bottom: 12px;">Lessons ({{filteredLessons.length}})</h2>
+                
                 <!-- Lesson Grid, to display each lesson in a grid using v-for loop -->
                 <div class="lessons-grid">
                     <div class="lesson" v-for="lesson in filteredLessons">
@@ -143,17 +148,20 @@
                     <!-- Checkout Form -->
                     <div class="checkout-panel">
                         <h3 style="margin-bottom: 8px;">Checkout</h3>
+
+                        <!-- Div class containing input forms -->
                         <div class="checkout-inputs">
                             <input type="text" placeholder="Full Name (letters only)" v-model:trim="checkout.name">
                             <input type="text" placeholder="Phone Number (digits only)" v-model:trim="checkout.phone">
                         </div>
 
+                        <!-- Div class containing the checkout button, and validation message prompts in case of wrong input -->
                         <div class="checkout-btns">
                             <button class="btn" v-bind:disabled="!isCheckoutValid" v-on:click="submitCheckout" style="background: #2b6cb0; color: white;">
                                 <i class="fa solid fa-credit-card"></i>Place Order
                             </button>
                             <div class="note">
-                                <div v-if="!checkout.name" style="color: #475569">Name required</div>
+                                <div v-if="!checkout.name" style="color: #475569">Full name required</div>
                                 <div v-else-if="!isNameValid" style="color: #b91c1c">Name must contain letters only (A-Z, spaces allowed)</div>
 
                                 <div v-if="!checkout.phone" style="color: #475569">Phone number required</div>
@@ -171,3 +179,4 @@
     <script src="vuejs.js"></script>
 </body>
 </html>
+<!-- End of HTML Code -->
