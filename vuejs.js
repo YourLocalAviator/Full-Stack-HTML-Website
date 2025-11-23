@@ -1,7 +1,7 @@
 var webstore = new Vue({
     el: '#app',
     data: {
-        lessons: lessons,
+        lessons: [],
         showCartPage: false,
 
         sortAttribute: 'subject',
@@ -16,32 +16,42 @@ var webstore = new Vue({
     },
     // Initialization of Vue and data. 
 
+    async created () {
+        await this.fetchLessons();
+    },
     methods: {
+        async fetchLessons() {
+            this.lessons = await getLessons();
+        },
         toggleCartPage() {
             this.showCartPage = this.showCartPage ? false : true;
         },
         // Function to show the cart page if true, if not, show the product page and set to false.
 
-        addToCart(lesson) {
+        async addToCart(lesson) {
             if (lesson.spaces <=0) return;
-            const cartEntry = this.cart.find(it => it.lessonId === lesson.id);
+            const cartEntry = this.cart.find(it => it.lessonId === lesson._id);
             if (cartEntry) {
                 cartEntry.quantity += 1;
             }
             else {
-                this.cart.push({lessonId: lesson.id, quantity: 1});
+                this.cart.push({lessonId: lesson._id, quantity: 1});
             }
             lesson.spaces--;
+
+            await updateOrder(lesson._id, {spaces: lesson.spaces});
         },
         /* Function that will add an item to the cart, if there is more than 0 spaces,
         locates the lesson ID, adds a quantity to the cart, and removes 1 space from the lesson item. */
 
-        increaseCartItem(lesson) {
+        async increaseCartItem(lesson) {
             if (lesson.spaces <= 0) return;
-            const entry = this.cart.find(it => it.lessonId === lesson.id);
+            const entry = this.cart.find(it => it.lessonId === lesson._id);
             if (entry) {
                 entry.quantity += 1;
                 lesson.spaces -= 1;
+
+                await updateOrder(lesson._id, {spaces: lesson.spaces});
             }
         },
         /* Function that will add an additional quantity of an item inside the cart page,
@@ -49,55 +59,79 @@ var webstore = new Vue({
         it is through the lesson ID, then adding another quantity in the cart, whilst removing one
         space from the lesson item. */
 
-        decreaseCartItem(lesson) {
-            const entryIndex = this.cart.findIndex(it => it.lessonId === lesson.id);
+        async decreaseCartItem(lesson) {
+            const entryIndex = this.cart.findIndex(it => it.lessonId === lesson._id);
             if (entryIndex === -1) return;
 
             const entry = this.cart[entryIndex];
-            lesson.spaces += 1;
-            entry.quantity -= 1;
+            lesson.spaces++;
+            entry.quantity--;
 
             if (entry.quantity <= 0){
                 this.cart.splice(entryIndex,1);
             }
+
+            await updateOrder(lesson._id, {spaces: lesson.spaces});
         },
         /* Function that will remove a quantity of an item inside the cart page,
         it locates which lesson item via lesson ID and will remove a quantity from the cart page,
         whilst adding one space to the lesson item. If the quantity becomes 0, that item is removed
         from the cart page. */
 
-        removeFromCart(lesson){
-            const entryIndex = this.cart.findIndex(it => it.lessonId === lesson.id);
+        async removeFromCart(lesson){
+            const entryIndex = this.cart.findIndex(it => it.lessonId === lesson._id);
             if (entryIndex === -1) return;
 
             const entry = this.cart[entryIndex];
             lesson.spaces += entry.quantity;
             this.cart.splice(entryIndex,1);
+
+            await updateOrder(lesson._id, {spaces: lesson.spaces});
         },
         /* Removes an item completely from the cart. It checks which lesson item using the lesson ID,
         then restores the spaces from the quantity in the cart and removes the item from the cart page. */
 
-        emptyCart() {
-            this.cart.forEach(cartItem => {
-                const lesson = this.lessons.find(lesson => lesson.id === cartItem.lessonId);
-                if (lesson) {
+        async emptyCart() {
+            for (const cartItem of this.cart) {
+                const lesson = this.lessons.find(l => l._id === cartItem.lessonId);
+                if (lesson){
                     lesson.spaces += cartItem.quantity;
+
+                    await updateOrder(lesson._id, {spaces: lesson.spaces});
                 }
-            });
+            }
             this.cart = [];
         },
         /* Empties the cart of all items. It performs a forEach loop which first locates the lesson item through 
         lesson ID, then restores the spaces from the quantity in the cart, and then clears the cart array. */
 
-        submitCheckout() {
+        async submitCheckout() {
             if (!this.isCheckoutValid) return;
 
-            const checkoutSummary = this.cartSummary.map(s =>
-                `${s.lesson.title} x${s.quantity} ${(s.lesson.price * s.quantity)}`
-            );
-            const checkoutTotal = this.cartTotal;
-            const checkoutMessage = `Order Submitted! Thank you for your order. \n\n Name: ${this.checkout.name} \n Phone: ${this.checkout.phone} \n\nItems: \n${checkoutSummary.join('\n')} \n\nTotal: $${checkoutTotal} `;
-            alert(checkoutMessage);
+            const orderLessons = this.cartSummary.map(item => ({
+                lessonID: item.lesson._id,
+                lessonName: item.lesson.title,
+                quantity: item.quantity
+            }));
+            
+            const orderData = {
+                name: this.checkout.name,
+                phone: this.checkout.phone,
+                lessons: orderLessons
+            };
+
+            try {
+                const res = await saveOrder(orderData);
+
+                if (res.msg === "Order added to database") {
+                    alert("Thank you! Order submitted successfully!");
+                } else {
+                    alert("Sorry, order submission failed. Please try again.");
+                } 
+            } catch (err) {
+                console.error("Checkout error: ", err);
+                alert("Error submitting order.");
+            };
 
             this.cart = [];
             this.checkout.name = '';
@@ -120,7 +154,7 @@ var webstore = new Vue({
 
         cartSummary(){
             return this.cart.map(it => {
-                const lesson = this.lessons.find(l => l.id === it.lessonId);
+                const lesson = this.lessons.find(l => l._id === it.lessonId);
                 return {lesson, quantity: it.quantity};
             });
         },
