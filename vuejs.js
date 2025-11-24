@@ -2,6 +2,7 @@ var webstore = new Vue({
     el: '#app',
     data: {
         lessons: [],
+        searchResults: [],
         showCartPage: false,
 
         sortAttribute: 'subject',
@@ -18,6 +19,16 @@ var webstore = new Vue({
 
     async created () {
         await this.fetchLessons();
+    },
+    watch: {
+        async searchQuery(newQuery) {
+            if (!newQuery.trim()) {
+                this.searchResults = [];
+                return;
+            }
+
+            this.searchResults = await searchLessons(newQuery);
+        }
     },
     methods: {
         async fetchLessons() {
@@ -173,6 +184,10 @@ var webstore = new Vue({
         /* Checks that the name input field is not empty, and checks using regex if the name is valid, and allows things
         such as upper and lower case lettesr, spaces, periods, hyphens and apostrophes. */
 
+        isNameMinLength() {
+            return this.checkout.name.length >=8;
+        },
+
         isPhoneValid () {
             if (!this.checkout.phone) return false;
             return /^\+?\d+$/.test(this.checkout.phone);
@@ -181,30 +196,22 @@ var webstore = new Vue({
         such as + signs, and numbers, restricting anything else. */
 
         isCheckoutValid() {
-            return this.isNameValid && this.isPhoneValid && this.cartItemCount > 0;
+            return this.isNameValid && this.isNameMinLength && this.isPhoneValid && this.cartItemCount > 0;
         },
         /* Function that checks that all validation checks are completed, such as isNameValid, isPhoneValid, and 
         that there is more than one item in the cart. */
 
         filteredLessons() {
             // Search Function
-            const query = (this.searchQuery || '').trim().toLowerCase();
-            const matchedQuery = (lesson) => {
-                if (!query) return true;
-                const combinedInfo = `${lesson.title} ${lesson.subject} ${lesson.location} ${lesson.price} ${lesson.spaces}`.toLowerCase();
-                return combinedInfo.indexOf(query) !== -1;
-            };
-            let result = this.lessons.filter(matchedQuery);
-            /* Saves the user input as a constant, under "query".
-            It first checks if the query is empty, if it is, then just return all lessons. combinedInfo
-            contains all the lesson information into one string, making it easier to search under.
-            result will return all results that matched the query. */
+            let searchedLessons = this.searchQuery.trim()
+                ? this.searchResults
+                : this.lessons;
 
             // Sort Function
             const attr = this.sortAttribute;
             const dir = this.sortDirection === 'asc' ? 1 : -1;
 
-            result = result.slice().sort((a,b) => {
+            result = searchedLessons.slice().sort((a,b) => {
                 let va = a[attr];
                 let vb = b[attr];
 

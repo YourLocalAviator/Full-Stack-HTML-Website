@@ -36,17 +36,17 @@
                     <div class="sort-options">
                         <div class="note">
                             <strong>Sort by: </strong>
-                            <label><input type="radio" v-model="sortAttribute" value="subject">Subject</label>
-                            <label><input type="radio" v-model="sortAttribute" value="location">Location</label>
-                            <label><input type="radio" v-model="sortAttribute" value="price">Price</label>
-                            <label><input type="radio" v-model="sortAttribute" value="spaces">Availability</label>
+                            <label><input type="radio" v-model="sortAttribute" value="subject"> Subject </label>
+                            <label><input type="radio" v-model="sortAttribute" value="location"> Location </label>
+                            <label><input type="radio" v-model="sortAttribute" value="price"> Price </label>
+                            <label><input type="radio" v-model="sortAttribute" value="spaces"> Availability </label>
                         </div>
 
                         <!-- Ascending / Descending Sort Buttons -->
                         <div class="note" style="margin-top: 8px;">
                             <strong>Order: </strong>
-                            <label><input type="radio" v-model="sortDirection" value="asc">Ascending</label>
-                            <label><input type="radio" v-model="sortDirection" value="desc">Descending</label>
+                            <label><input type="radio" v-model="sortDirection" value="asc"> Ascending </label>
+                            <label><input type="radio" v-model="sortDirection" value="desc"> Descending </label>
                         </div>
                     </div>
                 </div>
@@ -163,6 +163,7 @@
                             <div class="note">
                                 <div v-if="!checkout.name" style="color: #475569">Full name required</div>
                                 <div v-else-if="!isNameValid" style="color: #b91c1c">Name must contain letters only (A-Z, spaces allowed)</div>
+                                <div v-else-if="!isNameMinLength" style="color: #b91c1c">Name must have a minimum of 8 characters</div>
 
                                 <div v-if="!checkout.phone" style="color: #475569">Phone number required</div>
                                 <div v-else-if="!isPhoneValid" style="color: #b91c1c">Phone number must contain digits only</div>
@@ -178,6 +179,7 @@
     <script src="getLessons.js"></script>
     <script src="updateLesson.js"></script>
     <script src="saveOrder.js"></script>
+    <script src="searchLessons.js"></script>
     <script src="vuejs.js"></script>
 </body>
 </html>
