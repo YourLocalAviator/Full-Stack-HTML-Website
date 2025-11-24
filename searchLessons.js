@@ -1,6 +1,6 @@
 async function searchLessons(query) {
     try {
-        const response = await fetch(`http://localhost:3000/search?query=${encodeURIComponent(query)}`, {
+        const response = await fetch(`https://cst-3144-cw-full-stack-back-end-code.onrender.com/search?query=${encodeURIComponent(query)}`, {
             method: "GET",
         });
          if (!response.ok) throw new Error("Failed to search lessons");
@@ -9,7 +9,7 @@ async function searchLessons(query) {
 
         return lessons.map(lesson => ({
             ...lesson,
-            icon: `http://localhost:3000/images/${lesson.icon}`
+            icon: `https://cst-3144-cw-full-stack-back-end-code.onrender.com/images/${lesson.icon}`
         }));
     } catch (err) {
         console.error(err);

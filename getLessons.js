@@ -1,6 +1,6 @@
 async function getLessons() {
     try {
-        const response = await fetch("http://localhost:3000/lessons", {
+        const response = await fetch("https://cst-3144-cw-full-stack-back-end-code.onrender.com/lessons", {
             method: "GET",
         });
 
@@ -10,7 +10,7 @@ async function getLessons() {
 
         return lessons.map(lesson => ({
             ...lesson,
-            icon: `http://localhost:3000/images/${lesson.icon}`
+            icon: `https://cst-3144-cw-full-stack-back-end-code.onrender.com/images/${lesson.icon}`
         }));
     } catch (err) {
         console.error(err);

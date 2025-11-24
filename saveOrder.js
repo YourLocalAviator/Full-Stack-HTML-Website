@@ -1,6 +1,6 @@
 async function saveOrder(orderData) {
     try {
-        const response = await fetch ("http://localhost:3000/orders", {
+        const response = await fetch ("https://cst-3144-cw-full-stack-back-end-code.onrender.com/orders", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

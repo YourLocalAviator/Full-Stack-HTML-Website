@@ -1,6 +1,6 @@
 async function updateOrder(lessonID, updateData) {
     try {
-        const response = await fetch(`http://localhost:3000/lessons/${lessonID}`, {
+        const response = await fetch(`https://cst-3144-cw-full-stack-back-end-code.onrender.com/lessons/${lessonID}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
