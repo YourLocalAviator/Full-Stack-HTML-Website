@@ -10,7 +10,7 @@ async function getLessons() {
 
         return lessons.map(lesson => ({
             ...lesson,
-            icon: `images/${lesson.icon}`
+            icon: `http://localhost:3000/images/${lesson.icon}`
         }));
     } catch (err) {
         console.error(err);
