@@ -20,6 +20,8 @@ var webstore = new Vue({
     async created () {
         await this.fetchLessons();
     },
+    // Use of async created() to run fetchLessons function.
+
     watch: {
         async searchQuery(newQuery) {
             if (!newQuery.trim()) {
@@ -29,17 +31,22 @@ var webstore = new Vue({
 
             this.searchResults = await searchLessons(newQuery);
         }
+        // Async Search Query to get the search input from the front end, and calls the searchLessons fetch function.
     },
+    // Use of watch to auto-trigger function when an input occurs / changes in the search.
+
     methods: {
         async fetchLessons() {
             this.lessons = await getLessons();
         },
+        // Use of async function for calling getLessons fetch function.
+
         toggleCartPage() {
             this.showCartPage = this.showCartPage ? false : true;
         },
         // Function to show the cart page if true, if not, show the product page and set to false.
 
-        async addToCart(lesson) {
+        addToCart(lesson) {
             if (lesson.spaces <=0) return;
             const cartEntry = this.cart.find(it => it.lessonId === lesson._id);
             if (cartEntry) {
@@ -49,20 +56,16 @@ var webstore = new Vue({
                 this.cart.push({lessonId: lesson._id, quantity: 1});
             }
             lesson.spaces--;
-
-            await updateOrder(lesson._id, {spaces: lesson.spaces});
         },
         /* Function that will add an item to the cart, if there is more than 0 spaces,
         locates the lesson ID, adds a quantity to the cart, and removes 1 space from the lesson item. */
 
-        async increaseCartItem(lesson) {
+        increaseCartItem(lesson) {
             if (lesson.spaces <= 0) return;
             const entry = this.cart.find(it => it.lessonId === lesson._id);
             if (entry) {
                 entry.quantity += 1;
                 lesson.spaces -= 1;
-
-                await updateOrder(lesson._id, {spaces: lesson.spaces});
             }
         },
         /* Function that will add an additional quantity of an item inside the cart page,
@@ -70,7 +73,7 @@ var webstore = new Vue({
         it is through the lesson ID, then adding another quantity in the cart, whilst removing one
         space from the lesson item. */
 
-        async decreaseCartItem(lesson) {
+        decreaseCartItem(lesson) {
             const entryIndex = this.cart.findIndex(it => it.lessonId === lesson._id);
             if (entryIndex === -1) return;
 
@@ -81,34 +84,28 @@ var webstore = new Vue({
             if (entry.quantity <= 0){
                 this.cart.splice(entryIndex,1);
             }
-
-            await updateOrder(lesson._id, {spaces: lesson.spaces});
         },
         /* Function that will remove a quantity of an item inside the cart page,
         it locates which lesson item via lesson ID and will remove a quantity from the cart page,
         whilst adding one space to the lesson item. If the quantity becomes 0, that item is removed
         from the cart page. */
 
-        async removeFromCart(lesson){
+        removeFromCart(lesson){
             const entryIndex = this.cart.findIndex(it => it.lessonId === lesson._id);
             if (entryIndex === -1) return;
 
             const entry = this.cart[entryIndex];
             lesson.spaces += entry.quantity;
             this.cart.splice(entryIndex,1);
-
-            await updateOrder(lesson._id, {spaces: lesson.spaces});
         },
         /* Removes an item completely from the cart. It checks which lesson item using the lesson ID,
         then restores the spaces from the quantity in the cart and removes the item from the cart page. */
 
-        async emptyCart() {
+        emptyCart() {
             for (const cartItem of this.cart) {
                 const lesson = this.lessons.find(l => l._id === cartItem.lessonId);
                 if (lesson){
                     lesson.spaces += cartItem.quantity;
-
-                    await updateOrder(lesson._id, {spaces: lesson.spaces});
                 }
             }
             this.cart = [];
@@ -135,6 +132,11 @@ var webstore = new Vue({
                 const res = await saveOrder(orderData);
 
                 if (res.msg === "Order added to database") {
+                    for (const item of this.cartSummary) {
+                        await updateLesson(item.lesson._id, {
+                            spaces: item.lesson.spaces
+                        });
+                    };
                     alert("Thank you! Order submitted successfully!");
                 } else {
                     alert("Sorry, order submission failed. Please try again.");
@@ -150,8 +152,8 @@ var webstore = new Vue({
             this.showCartPage = false;
         }
         /* Performs successful checkout. First checks if the isCheckoutValid function is true, if false, function will not run.
-        It then creates a summarized list of items of the lesson details, and displays it as a message. It then clears all checkout
-        details and shows the product page. */
+        It then creates a summarized list of items of the lesson details and order data. It then uploads the orderData to the 
+        back end, and also updates the lesson spaces in MongoDB. It then clears all checkout details and shows the product page. */
     },
     computed: {
         cartItemCount() {
@@ -187,6 +189,7 @@ var webstore = new Vue({
         isNameMinLength() {
             return this.checkout.name.length >=8;
         },
+        // Checks that the name has a minimum of 8 characters or more. 
 
         isPhoneValid () {
             if (!this.checkout.phone) return false;
@@ -198,8 +201,8 @@ var webstore = new Vue({
         isCheckoutValid() {
             return this.isNameValid && this.isNameMinLength && this.isPhoneValid && this.cartItemCount > 0;
         },
-        /* Function that checks that all validation checks are completed, such as isNameValid, isPhoneValid, and 
-        that there is more than one item in the cart. */
+        /* Function that checks that all validation checks are completed, such as isNameValid, isNameMinLength, 
+        isPhoneValid, and that there is more than one item in the cart. */
 
         filteredLessons() {
             // Search Function
@@ -232,7 +235,11 @@ var webstore = new Vue({
             })
             return result;
         }
-        /* Function that will filter out lessons based on the search or sort query. */
+        /* Function that will filter out lessons based on the search or sort query. It first checks if the user is
+        inputting something, if there is, the this.searchResults is called, if not, this.lessons is called. It then
+        checks if the user has used any of the sort features. slice() creates a copy of the results rather than
+        modifying the original array. It then performs sorting by text fields, then by numbers. 
+        If no sort was used, the original order is used, and the final result is sent to the front end. */
     }
 });
 // End of Vue-JS Code
