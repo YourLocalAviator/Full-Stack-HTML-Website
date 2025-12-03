@@ -110,7 +110,7 @@ var webstore = new Vue({
             }
             this.cart = [];
         },
-        /* Empties the cart of all items. It performs a forEach loop which first locates the lesson item through 
+        /* Empties the cart of all items. It performs a for loop which first locates the lesson item through 
         lesson ID, then restores the spaces from the quantity in the cart, and then clears the cart array. */
 
         async submitCheckout() {
@@ -152,8 +152,8 @@ var webstore = new Vue({
             this.showCartPage = false;
         }
         /* Performs successful checkout. First checks if the isCheckoutValid function is true, if false, function will not run.
-        It then creates a summarized list of items of the lesson details and order data. It then uploads the orderData to the 
-        back end, and also updates the lesson spaces in MongoDB. It then clears all checkout details and shows the product page. */
+        It then creates a summarized list of items of the lesson details and order data. It then uploads the orderData to 
+        MongoDB, and also updates the lesson spaces. It then clears all checkout details and shows the product page. */
     },
     computed: {
         cartItemCount() {
